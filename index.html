@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verdant Capital — Invest in What Matters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --sage:       #b5c9b7;
+      --sage-light: #d8e8d9;
+      --blush:      #f0d9d0;
+      --blush-dark: #e0bfb2;
+      --sky:        #c9dde8;
+      --sky-dark:   #a8c5d6;
+      --lavender:   #d5cfe8;
+      --cream:      #faf8f3;
+      --ink:        #2a2d26;
+      --ink-soft:   #4a5046;
+      --gold:       #c8a96e;
+      --gold-light: #e8d0a0;
+      --white:      #ffffff;
+      --radius:     14px;
+      --shadow:     0 8px 40px rgba(42,45,38,.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 5%;
+      background: rgba(250,248,243,.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(181,201,183,.3);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(42,45,38,.07); }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem; font-weight: 600; color: var(--ink);
+      text-decoration: none; letter-spacing: .02em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--ink-soft);
+      font-size: .88rem; font-weight: 500; letter-spacing: .03em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      background: var(--ink); color: var(--cream);
+      border: none; padding: 10px 22px; border-radius: 40px;
+      font-family: 'DM Sans', sans-serif; font-size: .85rem; font-weight: 500;
+      cursor: pointer; transition: background .2s, transform .15s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--ink-soft); transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: .3s; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 0;
+      position: fixed; top: 70px; left: 0; right: 0;
+      background: var(--cream); border-bottom: 1px solid var(--sage-light);
+      z-index: 99; padding: 16px 0;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 12px 5%; text-decoration: none; color: var(--ink-soft);
+      font-size: .95rem; border-bottom: 1px solid var(--sage-light);
+    }
+
+    #hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+      gap: 48px; padding: 120px 5% 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 40%, var(--sage-light) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, var(--blush) 0%, transparent 60%),
+        var(--cream);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold-light); color: var(--ink); border-radius: 40px;
+      padding: 6px 16px; font-size: .78rem; font-weight: 500; letter-spacing: .04em;
+      margin-bottom: 24px; text-transform: uppercase;
+    }
+    .hero-badge::before { content: '●'; color: var(--gold); font-size: .6rem; }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+      line-height: 1.08; color: var(--ink); margin-bottom: 24px;
+    }
+    h1 em { color: var(--gold); font-style: italic; }
+    .hero-desc {
+      font-size: 1rem; color: var(--ink-soft); line-height: 1.75;
+      max-width: 460px; margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--ink); color: var(--cream);
+      padding: 14px 30px; border-radius: 40px; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+      cursor: pointer; transition: background .2s, transform .15s; text-decoration: none;
+    }
+    .btn-primary:hover { background: var(--ink-soft); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--ink);
+      padding: 14px 30px; border-radius: 40px; border: 1.5px solid var(--ink);
+      font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+      cursor: pointer; transition: .2s; text-decoration: none;
+    }
+    .btn-outline:hover { background: var(--ink); color: var(--cream); }
+
+    .hero-visual { position: relative; z-index: 1; }
+    .hero-card {
+      background: var(--white); border-radius: 24px;
+      padding: 32px; box-shadow: var(--shadow);
+      border: 1px solid rgba(181,201,183,.4);
+      animation: floatUp 1s ease both;
+    }
+    .hero-card-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); margin-bottom: 6px; }
+    .hero-card-value { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 600; color: var(--ink); }
+    .hero-card-sub { font-size: .8rem; color: #7daa80; font-weight: 500; margin-top: 4px; }
+    .hero-stat-row { display: flex; gap: 16px; margin-top: 24px; }
+    .hero-stat {
+      flex: 1; background: var(--cream); border-radius: 14px;
+      padding: 16px; text-align: center;
+    }
+    .hero-stat-n { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; }
+    .hero-stat-l { font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+    .mini-chart { display: flex; align-items: flex-end; gap: 5px; height: 50px; margin-top: 20px; }
+    .bar {
+      flex: 1; border-radius: 6px 6px 0 0;
+      background: var(--sage); transition: background .3s;
+    }
+    .bar:hover { background: var(--gold); }
+    .bar.highlight { background: var(--gold-light); }
+
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    section { padding: 96px 5%; }
+    .section-tag {
+      font-size: .75rem; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--gold); font-weight: 500; margin-bottom: 12px;
+    }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    .section-desc { font-size: .95rem; color: var(--ink-soft); line-height: 1.8; max-width: 560px; }
+
+    .marquee-wrap {
+      background: var(--ink); color: var(--cream);
+      padding: 14px 0; overflow: hidden;
+    }
+    .marquee-track {
+      display: flex; gap: 60px; white-space: nowrap;
+      animation: marquee 22s linear infinite;
+      font-size: .82rem; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .marquee-item { display: flex; align-items: center; gap: 12px; }
+    .marquee-item .up { color: #90d9a0; }
+    .marquee-item .down { color: #f4a0a0; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    #services { background: var(--white); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px; margin-top: 56px;
+    }
+    .service-card {
+      background: var(--cream); border-radius: var(--radius);
+      padding: 32px 28px; border: 1px solid transparent;
+      transition: border-color .3s, box-shadow .3s, transform .2s;
+      cursor: default;
+    }
+    .service-card:hover {
+      border-color: var(--sage); box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+      font-weight: 600; margin-bottom: 10px;
+    }
+    .service-card p { font-size: .85rem; color: var(--ink-soft); line-height: 1.7; }
+
+    #stats {
+      background: linear-gradient(135deg, var(--sage-light) 0%, var(--blush) 100%);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px; margin-top: 56px;
+    }
+    .stat-block { text-align: center; }
+    .stat-block .number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 600;
+      color: var(--ink); line-height: 1;
+    }
+    .stat-block .unit { color: var(--gold); }
+    .stat-block .label { font-size: .82rem; color: var(--ink-soft); margin-top: 8px; letter-spacing: .04em; }
+
+    #portfolio { background: var(--cream); }
+    .filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin: 32px 0; }
+    .tab {
+      padding: 8px 20px; border-radius: 40px; border: 1.5px solid var(--sage);
+      background: transparent; font-family: 'DM Sans', sans-serif; font-size: .83rem;
+      cursor: pointer; transition: .2s; color: var(--ink-soft);
+    }
+    .tab.active, .tab:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    .portfolio-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .portfolio-card {
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); background: var(--white);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 16px 56px rgba(42,45,38,.13); }
+    .portfolio-img {
+      height: 160px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; position: relative; overflow: hidden;
+    }
+    .portfolio-img .img-placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; color: rgba(255,255,255,.7); text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .portfolio-body { padding: 20px; }
+    .portfolio-tag {
+      font-size: .7rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--gold); font-weight: 500; margin-bottom: 6px;
+    }
+    .portfolio-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 600; margin-bottom: 6px;
+    }
+    .portfolio-card p { font-size: .82rem; color: var(--ink-soft); line-height: 1.65; }
+    .portfolio-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; border-top: 1px solid var(--cream);
+    }
+    .portfolio-return { font-size: .8rem; font-weight: 500; color: #5aad6a; }
+    .portfolio-year { font-size: .75rem; color: var(--ink-soft); }
+
+    #team { background: var(--white); }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 28px; margin-top: 56px;
+    }
+    .team-card {
+      text-align: center; padding: 32px 20px;
+      background: var(--cream); border-radius: var(--radius);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .team-avatar {
+  width: 88px; height: 88px; border-radius: 50%;
+  margin: 0 auto 18px; display: flex; align-items: center;
+  justify-content: center; font-size: 2rem; border: 3px solid var(--white);
+  box-shadow: 0 4px 16px rgba(42,45,38,.1);
+  background: var(--sage-light);
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+    }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-placeholder { font-size: 1.8rem; }
+    .team-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; }
+    .team-card .role { font-size: .78rem; color: var(--gold); letter-spacing: .06em; text-transform: uppercase; margin: 4px 0 10px; }
+    .team-card .bio { font-size: .8rem; color: var(--ink-soft); line-height: 1.65; }
+
+    #jokes {
+      background: linear-gradient(135deg, var(--lavender) 0%, var(--sky) 100%);
+    }
+    .jokes-inner {
+      max-width: 680px; margin: 0 auto; text-align: center;
+    }
+    .joke-card {
+      background: var(--white); border-radius: 20px;
+      padding: 40px 36px; margin-top: 40px;
+      box-shadow: var(--shadow); position: relative;
+      min-height: 160px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .joke-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; line-height: 1.5; color: var(--ink);
+      margin-bottom: 14px; font-style: italic;
+    }
+    .joke-punchline {
+      font-size: .9rem; color: var(--ink-soft);
+      padding-top: 14px; border-top: 1px dashed var(--sage);
+      line-height: 1.7;
+    }
+    .joke-category {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--gold-light); color: var(--ink); padding: 4px 16px;
+      border-radius: 40px; font-size: .7rem; text-transform: uppercase; letter-spacing: .1em;
+      font-weight: 500; white-space: nowrap;
+    }
+    .joke-loader {
+      display: flex; gap: 8px; justify-content: center; align-items: center;
+      color: var(--ink-soft); font-size: .85rem; margin-top: 6px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); animation: blink 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+    .btn-joke {
+      margin-top: 28px; background: var(--ink); color: var(--cream);
+      padding: 12px 28px; border-radius: 40px; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: .88rem; cursor: pointer;
+      transition: .2s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-joke:hover { background: var(--ink-soft); transform: translateY(-2px); }
+    .btn-joke svg { transition: transform .3s; }
+    .btn-joke:hover svg { transform: rotate(180deg); }
+    .joke-error { color: #c0665a; font-size: .85rem; margin-top: 12px; }
+
+    #testimonials { background: var(--cream); }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; margin-top: 56px;
+    }
+    .testi-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 30px; box-shadow: var(--shadow);
+      border-top: 4px solid var(--sage);
+    }
+    .testi-stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-text { font-size: .88rem; color: var(--ink-soft); line-height: 1.75; font-style: italic; margin-bottom: 20px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-ava {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--blush); display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .testi-name { font-weight: 500; font-size: .88rem; }
+    .testi-title { font-size: .75rem; color: var(--ink-soft); }
+
+    #contact {
+      background: var(--ink); color: var(--cream);
+    }
+    #contact .section-tag { color: var(--gold-light); }
+    #contact h2 { color: var(--cream); }
+    #contact .section-desc { color: rgba(250,248,243,.6); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      margin-top: 56px; align-items: start;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(250,248,243,.08); display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-item strong { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--gold-light); }
+    .contact-item p { font-size: .88rem; color: rgba(250,248,243,.65); margin-top: 3px; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+      width: 100%; background: rgba(250,248,243,.07);
+      border: 1px solid rgba(250,248,243,.15); border-radius: 10px;
+      padding: 14px 16px; color: var(--cream);
+      font-family: 'DM Sans', sans-serif; font-size: .88rem;
+      transition: border-color .2s; outline: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: rgba(250,248,243,.3); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--sage); }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      background: var(--gold-light); color: var(--ink); border: none;
+      padding: 14px; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+      cursor: pointer; transition: .2s;
+    }
+    .form-submit:hover { background: var(--gold); transform: translateY(-2px); }
+    .form-success {
+      display: none; background: rgba(144,217,160,.1);
+      border: 1px solid rgba(144,217,160,.3); border-radius: 10px;
+      padding: 14px; text-align: center; font-size: .88rem; color: #90d9a0;
+    }
+
+    footer {
+      background: #1e201a; color: rgba(250,248,243,.45);
+      padding: 40px 5%; display: flex;
+      justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    footer .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: var(--cream); font-weight: 600;
+    }
+    footer .logo span { color: var(--gold); }
+    footer p { font-size: .78rem; }
+    footer nav { display: flex; gap: 20px; background: none; position: static; border: none; padding: 0; backdrop-filter: none; }
+    footer nav a { font-size: .78rem; color: rgba(250,248,243,.45); text-decoration: none; }
+    footer nav a:hover { color: var(--cream); }
+
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; padding-top: 110px; }
+      .hero-visual { order: -1; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      section { padding: 64px 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">Verdant<span>Capital</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#jokes">Insights</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Get Started</a>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#portfolio" onclick="closeMobile()">Portfolio</a>
+  <a href="#team" onclick="closeMobile()">Team</a>
+  <a href="#jokes" onclick="closeMobile()">Insights</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Est. 1996 · Jakarta, Indonesia</div>
+    <h1>Grow wealth<br>with <em>purpose</em><br>& precision.</h1>
+    <p class="hero-desc">
+      Verdant Capital is a forward-thinking investment firm helping individuals
+      and institutions build resilient, high-yield portfolios — guided by data,
+      driven by integrity.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#services">Explore Services</a>
+      <a class="btn-outline" href="#contact">Talk to an Advisor</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-label">Total Assets Under Management</div>
+      <div class="hero-card-value">$6.7B</div>
+      <div class="hero-card-sub">▲ +21% this year</div>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <div class="hero-stat-n">300+</div>
+          <div class="hero-stat-l">Clients</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">17%</div>
+          <div class="hero-stat-l">Avg. Return</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">30yr</div>
+          <div class="hero-stat-l">Experience</div>
+        </div>
+      </div>
+      <div class="mini-chart" id="miniChart" title="Monthly performance (placeholder)"></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+  </div>
+</div>
+
+<section id="services">
+  <div class="reveal">
+    <div class="section-tag">What We Do</div>
+    <h2>Investment services<br>tailored for you</h2>
+    <p class="section-desc">
+      From equities to alternative assets, we offer a full spectrum of
+      investment solutions designed to match your financial goals and risk appetite.
+    </p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--sage-light)">📈</div>
+      <h3>Equity Management</h3>
+      <p>Professionally managed stock portfolios curated from top domestic and global markets with systematic rebalancing.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--blush)">🏢</div>
+      <h3>Real Estate Investment</h3>
+      <p>Access premium real estate opportunities — from REITs to direct property investment — with expert due diligence.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--lavender)">🔐</div>
+      <h3>Fixed Income</h3>
+      <p>Stable, predictable returns through bonds, sukuk, and government securities tailored to your time horizon.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--sky)">🌱</div>
+      <h3>ESG & Impact Investing</h3>
+      <p>Build wealth while making a positive impact — we screen for environmental, social, and governance standards.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--gold-light)">💡</div>
+      <h3>Wealth Advisory</h3>
+      <p>Personalised financial planning, tax optimisation, and estate strategy delivered by certified wealth planners.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon" style="background:var(--sage-light)">📊</div>
+      <h3>Market Analytics</h3>
+      <p>Data-driven research reports and real-time insights to help you make confident, informed investment decisions.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="reveal" style="text-align:center">
+    <div class="section-tag">By the Numbers</div>
+    <h2>Results that speak<br>for themselves</h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-block reveal">
+      <div class="number">$<span class="counter" data-target="12">0</span><span class="unit">B+</span></div>
+      <div class="label">Assets Under Management</div>
+    </div>
+    <div class="stat-block reveal">
+      <div class="number"><span class="counter" data-target="2400">0</span><span class="unit">+</span></div>
+      <div class="label">Active Investors</div>
+    </div>
+    <div class="stat-block reveal">
+      <div class="number"><span class="counter" data-target="17">0</span><span class="unit">%</span></div>
+      <div class="label">Average Annual Return</div>
+    </div>
+    <div class="stat-block reveal">
+      <div class="number"><span class="counter" data-target="30">0</span><span class="unit">yr</span></div>
+      <div class="label">Years of Excellence</div>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="reveal">
+    <div class="section-tag">Our Portfolio</div>
+    <h2>Where we invest</h2>
+    <p class="section-desc">A curated selection of our most successful ventures across sectors and geographies.</p>
+  </div>
+  <div class="filter-tabs reveal">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="tech">Technology</button>
+    <button class="tab" data-filter="realestate">Real Estate</button>
+    <button class="tab" data-filter="esg">ESG</button>
+    <button class="tab" data-filter="finance">Finance</button>
+  </div>
+  <div class="portfolio-grid" id="portfolioGrid"></div>
+</section>
+
+<section id="team">
+  <div class="reveal">
+    <div class="section-tag">Our People</div>
+    <h2>Meet the team behind<br>your portfolio</h2>
+    <p class="section-desc">Experienced professionals with decades of combined expertise in global markets and financial strategy.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-avatar">
+  <img src="https://i.ibb.co.com/WWpR85My/kiiyu.jpg" 
+       style="width:100%; height:100%; object-fit:cover; display:block;" />
+</div>
+      <h3>Kiiyu Eldegard</h3>
+      <div class="role">Chief Executive Officer</div>
+      <p class="bio">Veteran investment executive with leadership experience across private equity, capital markets, and strategic growth initiatives. Expertise in institutional fundraising, corporate governance, and long-term portfolio expansion.</p>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">
+  <img src="https://i.ibb.co.com/RTWwRHpv/Alisa.jpg" 
+       style="width:100%; height:100%; object-fit:cover; display:block;" />
+</div>
+      <h3>Alisa Mikhailovna Kujō</h3>
+      <div class="role">Chief Investment Officer</div>
+      <p class="bio">Investment strategist specializing in multi-asset allocation, risk management, and global market analysis. Background in overseeing diversified portfolios across equities, infrastructure, and alternative investments.</p>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">
+  <img src="https://i.ibb.co.com/TBN2jdNY/Shiina.jpg" 
+       style="width:100%; height:100%; object-fit:cover; display:block;" />
+</div>
+      <h3>Mahiru Shiina</h3>
+      <div class="role">Head of Research</div>
+      <p class="bio">Financial research leader with expertise in macroeconomics, sector analysis, and data-driven investment intelligence. Experienced in producing institutional-grade market insights and identifying emerging trends.</p>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-avatar">
+  <img src="https://i.ibb.co.com/7NLvzdW9/Charlotte.jpg" 
+       style="width:100%; height:100%; object-fit:cover; display:block;" />
+</div>
+      <h3>Charlotte Bennett</h3>
+      <div class="role">Senior Portfolio Manager</div>
+      <p class="bio">Portfolio management professional focused on equity selection, asset optimization, and performance execution. Background in managing high-value client portfolios with emphasis on risk-adjusted returns.</p>
+    </div>
+  </div>
+</section>
+
+<section id="jokes">
+  <div class="jokes-inner">
+    <div class="reveal">
+      <div class="section-tag">Lighten Up 🎉</div>
+      <h2>Joke of the Day</h2>
+      <p class="section-desc" style="margin:0 auto">
+        Even serious investors need a laugh. Here's today's dose of financial-friendly humour — fresh from the internet.
+      </p>
+    </div>
+    <div class="joke-card reveal" id="jokeCard">
+      <div class="joke-category" id="jokeCategory">Loading…</div>
+      <div class="joke-loader" id="jokeLoader">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span>Fetching a joke…</span>
+      </div>
+      <div id="jokeSetup" class="joke-quote" style="display:none"></div>
+      <div id="jokePunchline" class="joke-punchline" style="display:none"></div>
+      <div id="jokeSingle" class="joke-quote" style="display:none; font-style:normal; font-size:1.1rem;"></div>
+      <div id="jokeError" class="joke-error" style="display:none"></div>
+    </div>
+    <button class="btn-joke" id="fetchJokeBtn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M13.65 2.35A8 8 0 1 0 15 8"/>
+        <polyline points="15 2 15 8 9 8"/>
+      </svg>
+      Get Another Joke
+    </button>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="reveal">
+    <div class="section-tag">Client Stories</div>
+    <h2>What our clients say</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Their team delivered consistent communication, disciplined portfolio management, and returns that exceeded our benchmark expectations. The investment process felt institutional-grade from start to finish."</p>
+      <div class="testi-author">
+        <div class="testi-ava">🧑</div>
+        <div>
+          <div class="testi-name">Phainon Khaslana</div>
+          <div class="testi-title">Dawnmaker, Amorpheus</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"We were impressed by the depth of research, transparency, and risk management approach. The portfolio achieved strong long-term growth while maintaining stability during volatile market conditions."</p>
+      <div class="testi-author">
+        <div class="testi-ava">👩</div>
+        <div>
+          <div class="testi-name">Topaz</div>
+          <div class="testi-title">Strategic Investment Department, IPC</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★☆</div>
+      <p class="testi-text">"Professional, data-driven, and highly responsive. Their investment strategy helped us diversify effectively and generate sustainable returns aligned with our long-term objectives."</p>
+      <div class="testi-author">
+        <div class="testi-ava">🧔</div>
+        <div>
+          <div class="testi-name">Welt Yang</div>
+          <div class="testi-title">CEO, Arahato</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="reveal">
+    <div class="section-tag">Get in Touch</div>
+    <h2>Start your investment<br>journey today</h2>
+    <p class="section-desc">Our advisors are ready to help you build a portfolio that works as hard as you do.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <strong>Address</strong>
+          <p>Jl. Jend. Gatot Subroto Kav. 36-38, Jakarta Selatan, DKI Jakarta 12190.<br>Indonesia</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <strong>Phone</strong>
+          <p>+62 676-9420-1945</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <strong>Email</strong>
+          <p>info@VerdantCapital.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <strong>Business Hours</strong>
+          <p>Monday – Friday: 08:00 – 17:00 WIB</p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <input type="text" placeholder="First Name" />
+        <input type="text" placeholder="Last Name" />
+      </div>
+      <input type="email" placeholder="Email Address" />
+      <input type="tel" placeholder="Phone Number" />
+      <select>
+        <option value="" disabled selected>Select a Service</option>
+        <option>Equity Management</option>
+        <option>Real Estate Investment</option>
+        <option>Fixed Income</option>
+        <option>ESG & Impact Investing</option>
+        <option>Wealth Advisory</option>
+        <option>Market Analytics</option>
+      </select>
+      <textarea placeholder="Tell us about your investment goals…"></textarea>
+      <button class="form-submit" id="submitBtn">Send Message →</button>
+      <div class="form-success" id="formSuccess">✓ Thank you! We'll be in touch within 1 business day.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Verdant<span>Capital</span></div>
+  <p>© <span id="year"></span> VerdantCapital. All rights reserved. VerdantCapital PT PMA</p>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
+  });
+
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+
+  const chartData = [35,52,44,60,48,70,55,80,65,90,72,95];
+  const chart = document.getElementById('miniChart');
+  const max = Math.max(...chartData);
+  chartData.forEach((v, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar' + (i === chartData.length - 1 ? ' highlight' : '');
+    bar.style.height = (v / max * 100) + '%';
+    bar.title = `Month ${i+1}: ${v}`;
+    chart.appendChild(bar);
+  });
+
+  const tickers = [
+    {sym:'IDX.BBCA', price:'9,550', ch:'+1.2%', up:true},
+    {sym:'IDX.TLKM', price:'3,240', ch:'-0.5%', up:false},
+    {sym:'NASDAQ.AAPL', price:'218.40', ch:'+0.8%', up:true},
+    {sym:'NYSE.JPM', price:'195.20', ch:'+1.5%', up:true},
+    {sym:'IDX.ASII', price:'4,500', ch:'-0.3%', up:false},
+    {sym:'IDX.BMRI', price:'5,750', ch:'+2.1%', up:true},
+    {sym:'FOREX.USDIDR', price:'15,880', ch:'-0.1%', up:false},
+    {sym:'GOLD', price:'2,345', ch:'+0.6%', up:true},
+  ];
+  const track = document.getElementById('marqueeTrack');
+  const html = tickers.map(t =>
+    `<span class="marquee-item">${t.sym} <strong>${t.price}</strong> <span class="${t.up?'up':'down'}">${t.ch}</span></span>`
+  ).join('');
+  track.innerHTML = html + html; 
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  function animateCounter(el, target, duration = 1500) {
+    const start = performance.now();
+    const isDecimal = !Number.isInteger(target);
+    const step = ts => {
+      const elapsed = ts - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = isDecimal
+        ? (ease * target).toFixed(1)
+        : Math.round(ease * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const t = parseFloat(e.target.dataset.target);
+        animateCounter(e.target, t);
+        counterObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+  const portfolioItems = [
+    { sector:'tech', color:'#c9dde8', emoji:'💻', tag:'Technology', title:'Nvidia', desc:'Semiconductor & AI infrastructure company. Late-stage/public market leader in GPUs, accelerated computing, and AI platforms. positioned at the center of the global AI compute race, benefiting from surging demand for data center acceleration, AI model training, autonomous systems, and high-performance computing ecosystems.', ret:'+14%', year:'2020' },
+    { sector:'realestate', color:'#d8e8d9', emoji:'🏙️', tag:'Real Estate', title:'Blackstone', desc:'Alternative asset management firm focused on private equity, real estate, infrastructure, and credit investments. centered on diversified institutional-scale assets, long-term capital appreciation, and resilient cash-flow generation across global markets.', ret:'+8%', year:'2015' },
+    { sector:'esg', color:'#f0d9d0', emoji:'🌿', tag:'ESG', title:'NextEra Energy', desc:'Renewable energy and utility infrastructure company focused on decarbonization, grid modernization, and large-scale solar, wind, and battery storage deployment. over 30 GW of renewable generation capacity, long-term carbon emissions reduction targets, and continued expansion of clean energy projects supporting AI-driven electricity demand growth', ret:'+12%', year:'2016' },
+    { sector:'finance', color:'#d5cfe8', emoji:'🏦', tag:'Finance', title:'PayPal', desc:'Digital payments and fintech sector company providing online checkout, peer-to-peer transfers, merchant processing, and embedded financial services through PayPal, Venmo, and Braintree platforms. approximately 439 million active accounts globally and nearly $1.8 trillion in annual total payment volume, supported by continued expansion in branded checkout, Venmo monetization, and enterprise payment infrastructure..', ret:'+10%', year:'2015' },
+    { sector:'tech', color:'#e8d0a0', emoji:'🤖', tag:'Technology', title:'OpenAI', desc:'Artificial intelligence research and deployment company focused on generative AI models, multimodal systems, and enterprise AI infrastructure. Market opportunity driven by accelerating global adoption of AI copilots, automation platforms, developer APIs, and foundation models across productivity, software, education, healthcare, and enterprise operations', ret:'+23%', year:'2021' },
+    { sector:'realestate', color:'#c9dde8', emoji:'🏘️', tag:'Real Estate', title:'HDFC', desc:'Housing finance and real estate lending institution focused on residential mortgages, retail home financing, and selected commercial property lending. centered on NYC urban and emerging metropolitan markets, supported by long-term growth in housing demand, middle-class expansion, and financial inclusion.', ret:'+13%', year:'2019' },
+  ];
+
+  function renderPortfolio(filter = 'all') {
+    const grid = document.getElementById('portfolioGrid');
+    grid.innerHTML = '';
+    portfolioItems
+      .filter(p => filter === 'all' || p.sector === filter)
+      .forEach(p => {
+        grid.innerHTML += `
+          <div class="portfolio-card">
+            <div class="portfolio-img" style="background:${p.color}">
+              <span style="font-size:2.8rem">${p.emoji}</span>
+              <div class="img-placeholder"></div>
+            </div>
+            <div class="portfolio-body">
+              <div class="portfolio-tag">${p.tag}</div>
+              <h3>${p.title}</h3>
+              <p>${p.desc}</p>
+            </div>
+            <div class="portfolio-footer">
+              <span class="portfolio-return">${p.ret} return</span>
+              <span class="portfolio-year">Since ${p.year}</span>
+            </div>
+          </div>`;
+      });
+  }
+  renderPortfolio();
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderPortfolio(tab.dataset.filter);
+    });
+  });
+
+  async function fetchJoke() {
+    const loader  = document.getElementById('jokeLoader');
+    const setup   = document.getElementById('jokeSetup');
+    const punch   = document.getElementById('jokePunchline');
+    const single  = document.getElementById('jokeSingle');
+    const cat     = document.getElementById('jokeCategory');
+    const err     = document.getElementById('jokeError');
+
+    loader.style.display = 'flex';
+    setup.style.display = punch.style.display = single.style.display = err.style.display = 'none';
+    cat.textContent = 'Loading…';
+
+    try {
+      const res = await fetch(
+        'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,explicit,racist,sexist,religious,political&safe-mode'
+      );
+      if (!res.ok) throw new Error('Network error');
+      const data = await res.json();
+
+      cat.textContent = data.category || 'Joke';
+      loader.style.display = 'none';
+
+      if (data.type === 'twopart') {
+        setup.textContent = data.setup;
+        punch.textContent = data.delivery;
+        setup.style.display = 'block';
+        // Reveal punchline after delay
+        punch.style.display = 'none';
+        setTimeout(() => { punch.style.display = 'block'; }, 1200);
+      } else {
+        single.textContent = data.joke;
+        single.style.display = 'block';
+      }
+    } catch(e) {
+      loader.style.display = 'none';
+      cat.textContent = 'Oops';
+      err.textContent = '⚠ Could not fetch a joke right now. Check your connection and try again.';
+      err.style.display = 'block';
+    }
+  }
+  fetchJoke();
+  document.getElementById('fetchJokeBtn').addEventListener('click', fetchJoke);
+
+  document.getElementById('submitBtn').addEventListener('click', () => {
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  });
+</script>
+</body>
+</html>
